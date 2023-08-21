@@ -1,7 +1,8 @@
 from typing import Any, Optional
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView, ListView
 from . models import Car
 
 
@@ -30,23 +31,24 @@ from . models import Car
 #----------------------------------------------------------------------
 
 
-class Home(TemplateView):
-    # by TemplateView get mehod and return render the template name done automatically
-    template_name = 'home/home.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        ## adding data to context
-        context['cars'] = Car.objects.all()
-        return context
+# class Home(TemplateView):
+#     # by TemplateView get mehod and return render the template name done automatically
+#     template_name = 'home/home.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         ## adding data to context
+#         context['cars'] = Car.objects.all()
+#         return context
     
 
-class Two(RedirectView):
+# class Two(RedirectView):
     # url = 'google.com' # needs, add the url end of the current url, 127.0.0.1/two/google.com
     # url = 'https://google.com'
 
     # note: url doesnt support url names, so use pattern_names
-    pattern_name = 'home:home'
+    # pattern_name = 'home:home'
 
 
 
@@ -69,3 +71,28 @@ class Two(RedirectView):
     # sending the params using url(top) without urlpatterns or get_redirect_url:
     # url = '/home/%(name)s/%(id)i/' # i: int, s: str
 
+
+
+#-----------------------------------------------------------
+
+class Home(ListView):
+    template_name = 'home/home.html'
+    # model = Car # is available in template by <object_list>
+    # to change the name of <object_list>:
+    context_object_name = 'cars'
+    ordering = 'year' # a field in Car model
+    # allow_empty = False # True by default, eror 4XX if query is empty
+
+    # for specific query set use queryset, dont use model = Car
+    # queryset = Car.objects.filter(year__gte=2010)
+
+    # for complex queries use get_queryset
+    def get_queryset(self):
+        return Car.objects.filter(year__gte=2010)
+    
+    # adding more context using def_context_data
+    # def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         ## adding data to context
+#         context['username'] = 'jack'
+#         return context
