@@ -6,6 +6,7 @@ from django.views import View
 from . forms import CarCreateForm
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView
+from django.contrib.auth import views as auth_views
 from . models import Car
 
 
@@ -211,3 +212,13 @@ class CarupdateView(UpdateView):
     # form is sent automatically to template_name
 
     # template_name_suffix = '_update_form' # converted to car_update_form.html
+
+
+
+class UserLoginView(auth_views.LoginView):
+    template_name = 'home/login.html' # 'registration/login.html' is default
+    # AuthenticationForm is default
+
+    # after login
+    next_page = reverse_lazy('home:home') # or set the LOGIN_REDIRECR_URL = 'home:home' in settings.py, is used by other views
+    
