@@ -5,6 +5,8 @@
     {% for car in cars %}
     <p><a href="#">{{ car.name }}</a></p> <!-- car.id not car.pk or slug-->
     <a class="btn btn-primary" href="{% url 'home:car_delete' car.id %}">Delete</a>
+    <a class="btn btn-primary" href="{% url 'home:car_update' car.id %}">update</a>
+
     <br>
     <hr>
     {% endfor %}

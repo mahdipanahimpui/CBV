@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from . forms import CarCreateForm
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView
 from . models import Car
 
 
@@ -201,3 +201,13 @@ class CarDeleteView(DeleteView):
     success_url = reverse_lazy('home:home')
     template_name = 'home/delete.html' # ask to remove obj
     # send the <object> to template_name
+
+
+class CarupdateView(UpdateView):
+    model = Car
+    fields = ['name']
+    success_url = reverse_lazy('home:home')
+    template_name = 'home/update.html'
+    # form is sent automatically to template_name
+
+    # template_name_suffix = '_update_form' # converted to car_update_form.html
