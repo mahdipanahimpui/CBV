@@ -3,7 +3,9 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView
+from . forms import CarCreateForm
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView
 from . models import Car
 
 
@@ -101,15 +103,15 @@ from . models import Car
 #-------------------------------------------------------
 
 
-class Home(ListView):
-    template_name = 'home/home.html'
-    context_object_name = 'cars'
-    model = Car
+# class Home(ListView):
+#     template_name = 'home/home.html'
+#     context_object_name = 'cars'
+#     model = Car
 
-class CarDetailView(DetailView):
-    template_name = 'home/detail.html'
-    context_object_name = 'car'
-    model = Car
+# class CarDetailView(DetailView):
+#     template_name = 'home/detail.html'
+#     context_object_name = 'car'
+#     model = Car
     # slug_field = 'name' # set slug for url in tempalte 'home:home' car.name, in url <slug:slug>
     # if <slug:my_slug_name> set the slug_rul_kwarg
     # slug_url_kwarg = 'my_slug_name'
@@ -129,3 +131,30 @@ class CarDetailView(DetailView):
     #         name=self.kwargs['name']
     #     )
 
+#---------------------------------------------------
+
+
+
+class Home(ListView):
+    template_name = 'home/home.html'
+    context_object_name = 'cars'
+    model = Car
+
+
+class CarCreateView(FormView):
+    template_name = 'home/create.html'
+    form_class = CarCreateForm
+    # success_url = 'home/home' # to use namespace use reverse_lazy
+    success_url = reverse_lazy('home:home')
+
+
+    # override the form_valid
+
+    def form_valid(self, form): 
+        self._create_car(form.cleaned_data)
+        # messages.success(self.request, 'created ', 'success') # request is available by self
+        return super().form_valid(form)
+
+    # _ means the method is for the class not use in out of class, as warning
+    def _create_car(self, data): 
+        Car.objects.create(name=data['name'], owner=data['owner'], year=data['year'])

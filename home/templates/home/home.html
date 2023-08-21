@@ -3,6 +3,6 @@
 
 {% block content %}
     {% for car in cars %}
-    <p><a href="{% url 'home:car_detail' car.id %}">{{ car.name }}</a></p> <!-- car.id not car.pk or slug-->
+    <p><a href="#">{{ car.name }}</a></p> <!-- car.id not car.pk or slug-->
     {% endfor %}
 {% endblock content %}
