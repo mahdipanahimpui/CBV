@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from . forms import CarCreateForm
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView
 from . models import Car
 
 
@@ -163,23 +163,41 @@ from . models import Car
 
 
 # createView is use to create object, form handling is charge of the createView
+# class Home(ListView):
+#     template_name = 'home/home.html'
+#     context_object_name = 'cars'
+#     model = Car
+
+
+# class CarCreateView(CreateView):
+#     template_name = 'home/create.html'
+#     model = Car
+#     fields = ['name', 'year']
+#     success_url = reverse_lazy('home:home')
+
+#     # can use form valid
+#     def form_valid(self, form):
+#         car = form.save(commit=False)
+#         car.owner = self.request.user.username if self.request.user.username else 'nothing'
+
+#         car.save()
+#         # messages.success(self.request, 'car created', 'success')
+#         return super().form_valid(form)
+
+
+#----------------------------------------------------
+
+
+
 class Home(ListView):
     template_name = 'home/home.html'
     context_object_name = 'cars'
     model = Car
 
 
-class CarCreateView(CreateView):
-    template_name = 'home/create.html'
+# just send a id
+class CarDeleteView(DeleteView):
     model = Car
-    fields = ['name', 'year']
     success_url = reverse_lazy('home:home')
-
-    # can use form valid
-    def form_valid(self, form):
-        car = form.save(commit=False)
-        car.owner = self.request.user.username if self.request.user.username else 'nothing'
-
-        car.save()
-        # messages.success(self.request, 'car created', 'success')
-        return super().form_valid(form)
+    template_name = 'home/delete.html' # ask to remove obj
+    # send the <object> to template_name
