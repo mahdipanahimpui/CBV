@@ -1,8 +1,9 @@
 from typing import Any, Optional
+from django.db import models
 from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView, RedirectView, ListView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView
 from . models import Car
 
 
@@ -75,20 +76,20 @@ from . models import Car
 
 #-----------------------------------------------------------
 
-class Home(ListView):
-    template_name = 'home/home.html'
-    # model = Car # is available in template by <object_list>
-    # to change the name of <object_list>:
-    context_object_name = 'cars'
-    ordering = 'year' # a field in Car model
-    # allow_empty = False # True by default, eror 4XX if query is empty
+# class Home(ListView):
+#     template_name = 'home/home.html'
+#     # model = Car # is available in template by <object_list>
+#     # to change the name of <object_list>:
+#     context_object_name = 'cars'
+#     ordering = 'year' # a field in Car model
+#     # allow_empty = False # True by default, eror 4XX if query is empty
+ 
+#     # for specific query set use queryset, dont use model = Car
+#     # queryset = Car.objects.filter(year__gte=2010)
 
-    # for specific query set use queryset, dont use model = Car
-    # queryset = Car.objects.filter(year__gte=2010)
-
-    # for complex queries use get_queryset
-    def get_queryset(self):
-        return Car.objects.filter(year__gte=2010)
+#     # for complex queries use get_queryset
+#     def get_queryset(self):
+#         return Car.objects.filter(year__gte=2010)
     
     # adding more context using def_context_data
     # def get_context_data(self, **kwargs):
@@ -96,3 +97,35 @@ class Home(ListView):
 #         ## adding data to context
 #         context['username'] = 'jack'
 #         return context
+
+#-------------------------------------------------------
+
+
+class Home(ListView):
+    template_name = 'home/home.html'
+    context_object_name = 'cars'
+    model = Car
+
+class CarDetailView(DetailView):
+    template_name = 'home/detail.html'
+    context_object_name = 'car'
+    model = Car
+    # slug_field = 'name' # set slug for url in tempalte 'home:home' car.name, in url <slug:slug>
+    # if <slug:my_slug_name> set the slug_rul_kwarg
+    # slug_url_kwarg = 'my_slug_name'
+    # change the pk in <int:pk> by pk_url_kwarg
+
+    # set a specific queryset by queryset
+    # queryset = Car.objects.filter(year__gte=2010)# returning obj from the queryset objects, if not found error
+
+
+    # def get_queryset is available too, 
+
+    # using specific parameters: override the get_object
+    # ex) '<int:year>/<str:name>' in path
+    # def get_object(self, queryset=None):
+    #     return Car.objects.get(
+    #         year=self.kwargs['year'],
+    #         name=self.kwargs['name']
+    #     )
+
