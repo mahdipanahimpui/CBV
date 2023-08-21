@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView, MonthArchiveView
 from django.contrib.auth import views as auth_views
 from . models import Car
+from . serializers import CarSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView
 
 
 # class Home(View):
@@ -190,60 +192,103 @@ from . models import Car
 
 
 
-class Home(ListView):
-    template_name = 'home/home.html'
-    context_object_name = 'cars'
-    model = Car
+# class Home(ListView):
+#     template_name = 'home/home.html'
+#     context_object_name = 'cars'
+#     model = Car
 
 
-# just send a id
-class CarDeleteView(DeleteView):
-    model = Car
-    success_url = reverse_lazy('home:home')
-    template_name = 'home/delete.html' # ask to remove obj
-    # send the <object> to template_name
+# # just send a id
+# class CarDeleteView(DeleteView):
+#     model = Car
+#     success_url = reverse_lazy('home:home')
+#     template_name = 'home/delete.html' # ask to remove obj
+#     # send the <object> to template_name
 
 
-class CarupdateView(UpdateView):
-    model = Car
-    fields = ['name']
-    success_url = reverse_lazy('home:home')
-    template_name = 'home/update.html'
-    # form is sent automatically to template_name
+# class CarupdateView(UpdateView):
+#     model = Car
+#     fields = ['name']
+#     success_url = reverse_lazy('home:home')
+#     template_name = 'home/update.html'
+#     # form is sent automatically to template_name
 
-    # template_name_suffix = '_update_form' # converted to car_update_form.html
-
-
-
-class UserLoginView(auth_views.LoginView):
-    template_name = 'home/login.html' # 'registration/login.html' is default
-    # AuthenticationForm is default
-
-    # after login
-    next_page = reverse_lazy('home:home') # or set the LOGIN_REDIRECR_URL = 'home:home' in settings.py, is used by other views
+#     # template_name_suffix = '_update_form' # converted to car_update_form.html
 
 
 
+# class UserLoginView(auth_views.LoginView):
+#     template_name = 'home/login.html' # 'registration/login.html' is default
+#     # AuthenticationForm is default
 
-class UserLogoutView(auth_views.LogoutView):
-    next_page = reverse_lazy('home:home') # or LOGOUT_REDIRECT_URL = 'home:home'
+#     # after login
+#     next_page = reverse_lazy('home:home') # or set the LOGIN_REDIRECR_URL = 'home:home' in settings.py, is used by other views
 
 
 
 
-
-class MonthCarView(MonthArchiveView):
-    model = Car
-    date_field = 'created'
-    template_name = 'home/home.html' # where to show data as form
-    context_object_name = 'cars'
-
-    # if using <int:month> use month_format
-    # by suing <str:month> month_format not need
-    month_format = '%m'
-
-    # result: localhost/2022/3/ filters the objects by date
+# class UserLogoutView(auth_views.LogoutView):
+#     next_page = reverse_lazy('home:home') # or LOGOUT_REDIRECT_URL = 'home:home'
 
 
 
-    
+
+
+# class MonthCarView(MonthArchiveView):
+#     model = Car
+#     date_field = 'created'
+#     template_name = 'home/home.html' # where to show data as form
+#     context_object_name = 'cars'
+
+#     # if using <int:month> use month_format
+#     # by suing <str:month> month_format not need
+#     month_format = '%m'
+
+#     # result: localhost/2022/3/ filters the objects by date
+
+
+
+# ------------------------------------------------------------------------
+
+
+
+
+
+class Home(ListAPIView):
+    serializer_class = CarSerializer
+    queryset = Car.objects.all()
+
+
+
+class SingleCar(RetrieveAPIView):
+    serializer_class = CarSerializer
+    queryset = Car.objects.all()
+    # sent the <int:pk> by default but can change like <str:name>/ and change the lookup_field = name
+    lookup_field = 'name'  # sensitive to capital/small letters
+
+
+
+class DeleteCar(DestroyAPIView): # use delete mehtod in url
+    serializer_class = CarSerializer
+    queryset = Car.objects.all()
+
+    # sent the <int:pk>/ to change use:
+    lookup_field = 'name' # field name to delete
+    lookup_url_kwarg = 'car_name' # name of param in url
+
+
+
+
+
+class CarCreate(CreateAPIView): # use delete mehtod in url
+    serializer_class = CarSerializer
+    queryset = Car.objects.all()
+
+
+
+
+# put method: update the all fields, if not all, error occur
+# patch method: update partial
+class CarUpdate(UpdateAPIView):
+        serializer_class = CarSerializer
+        queryset = Car.objects.all()
