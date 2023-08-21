@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from . forms import CarCreateForm
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView
 from . models import Car
 
 
@@ -135,26 +135,51 @@ from . models import Car
 
 
 
+# class Home(ListView):
+#     template_name = 'home/home.html'
+#     context_object_name = 'cars'
+#     model = Car
+
+
+# class CarCreateView(FormView):
+#     template_name = 'home/create.html'
+#     form_class = CarCreateForm
+#     # success_url = 'home/home' # to use namespace use reverse_lazy
+#     success_url = reverse_lazy('home:home')
+
+
+#     # override the form_valid
+
+#     def form_valid(self, form): 
+#         self._create_car(form.cleaned_data)
+#         # messages.success(self.request, 'created ', 'success') # request is available by self
+#         return super().form_valid(form)
+
+#     # _ means the method is for the class not use in out of class, as warning
+#     def _create_car(self, data): 
+#         Car.objects.create(name=data['name'], owner=data['owner'], year=data['year'])
+
+# ------------------------------------------------------------------------------------
+
+
+# createView is use to create object, form handling is charge of the createView
 class Home(ListView):
     template_name = 'home/home.html'
     context_object_name = 'cars'
     model = Car
 
 
-class CarCreateView(FormView):
+class CarCreateView(CreateView):
     template_name = 'home/create.html'
-    form_class = CarCreateForm
-    # success_url = 'home/home' # to use namespace use reverse_lazy
+    model = Car
+    fields = ['name', 'year']
     success_url = reverse_lazy('home:home')
 
+    # can use form valid
+    def form_valid(self, form):
+        car = form.save(commit=False)
+        car.owner = self.request.user.username if self.request.user.username else 'nothing'
 
-    # override the form_valid
-
-    def form_valid(self, form): 
-        self._create_car(form.cleaned_data)
-        # messages.success(self.request, 'created ', 'success') # request is available by self
+        car.save()
+        # messages.success(self.request, 'car created', 'success')
         return super().form_valid(form)
-
-    # _ means the method is for the class not use in out of class, as warning
-    def _create_car(self, data): 
-        Car.objects.create(name=data['name'], owner=data['owner'], year=data['year'])
