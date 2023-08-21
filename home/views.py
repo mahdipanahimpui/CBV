@@ -312,13 +312,22 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 
 
 
-class Home(RetrieveModelMixin, DestroyModelMixin, GenericAPIView):
+class Home(RetrieveModelMixin, DestroyModelMixin, GenericAPIView): # this is WRONG coding instead use RtrieveDestroyAPIView, can override the like retrieve in like RtrieveDestroyAPIView
     serializer_class = CarSerializer
     queryset = Car.objects.all()
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object() # using the pk
+        if instance.name == 'audi':
+            return Response('sorry ...')
+        
+        ser_data = self.get_serializer(instance).data
+        return Response(ser_data)
+
+
     def get(self, request, *args, **kwargs):
-        # isinstance = self.get_object() # using the pk
-        # ser_data = self.get_serializer(isinstance).data
+        # instance = self.get_object() # using the pk
+        # ser_data = self.get_serializer(instance).data
         # return Response(ser_data)
         
         # instead above code use mixins
