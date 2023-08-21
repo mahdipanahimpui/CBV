@@ -7,7 +7,9 @@ from . forms import CarCreateForm
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView, MonthArchiveView
 from django.contrib.auth import views as auth_views
+from rest_framework.generics import GenericAPIView
 from . models import Car
+from rest_framework.response import Response
 from . serializers import CarSerializer
 from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView, ListCreateAPIView
 
@@ -298,6 +300,22 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 
 
 
-class Home(ListCreateAPIView):
+# class Home(ListCreateAPIView):
+#     serializer_class = CarSerializer
+#     queryset = Car.objects.all()
+
+
+
+# ------------------------------------------------------------------------
+
+
+
+
+class Home(GenericAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        isinstance = self.get_object() # using the pk
+        ser_data = self.get_serializer(isinstance).data
+        return Response(ser_data)

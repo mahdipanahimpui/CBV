@@ -19,6 +19,6 @@ urlpatterns = [
     # path('delete/<str:car_name>/', views.DeleteCar.as_view(), name='delete_car'),
     # path('create/', views.CarCreate.as_view(), name='car_create'),
     # path('update/<int:pk>', views.CarUpdate.as_view()),
-    path('', views.Home.as_view())
+    path('<int:pk>/', views.Home.as_view())
 
 ]
