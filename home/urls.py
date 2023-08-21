@@ -11,5 +11,6 @@ urlpatterns = [
     # path('create/', views.CarCreateView.as_view(), name='car_create'),
     path('delete/<int:pk>/', views.CarDeleteView.as_view(), name='car_delete'),
     path('update/<int:pk>/', views.CarupdateView.as_view(), name='car_update'),
-    path('login/', views.UserLoginView.as_view(), name='user_login')
+    path('login/', views.UserLoginView.as_view(), name='user_login'),
+    path('logout/', views.UserLogoutView.as_view(), name='user_logout'),
 ]

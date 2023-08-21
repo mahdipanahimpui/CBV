@@ -221,4 +221,9 @@ class UserLoginView(auth_views.LoginView):
 
     # after login
     next_page = reverse_lazy('home:home') # or set the LOGIN_REDIRECR_URL = 'home:home' in settings.py, is used by other views
-    
+
+
+
+
+class UserLogoutView(auth_views.LogoutView):
+    next_page = reverse_lazy('home:home') # or LOGOUT_REDIRECT_URL = 'home:home'
