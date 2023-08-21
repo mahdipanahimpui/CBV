@@ -9,6 +9,7 @@ from django.views.generic import TemplateView, RedirectView, ListView, DetailVie
 from django.contrib.auth import views as auth_views
 from rest_framework.generics import GenericAPIView
 from . models import Car
+from rest_framework.mixins import DestroyModelMixin, RetrieveModelMixin
 from rest_framework.response import Response
 from . serializers import CarSerializer
 from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView, ListCreateAPIView
@@ -311,11 +312,22 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 
 
 
-class Home(GenericAPIView):
+class Home(RetrieveModelMixin, DestroyModelMixin, GenericAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
 
     def get(self, request, *args, **kwargs):
-        isinstance = self.get_object() # using the pk
-        ser_data = self.get_serializer(isinstance).data
-        return Response(ser_data)
+        # isinstance = self.get_object() # using the pk
+        # ser_data = self.get_serializer(isinstance).data
+        # return Response(ser_data)
+        
+        # instead above code use mixins
+        return self.retrieve(request, *args, **kwargs)
+    
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+
+    # for special proccess override the mixins:
+    # dont do in METHODS
