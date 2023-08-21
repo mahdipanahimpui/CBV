@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from . forms import CarCreateForm
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView
+from django.views.generic import TemplateView, RedirectView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView, MonthArchiveView
 from django.contrib.auth import views as auth_views
 from . models import Car
 
@@ -227,3 +227,23 @@ class UserLoginView(auth_views.LoginView):
 
 class UserLogoutView(auth_views.LogoutView):
     next_page = reverse_lazy('home:home') # or LOGOUT_REDIRECT_URL = 'home:home'
+
+
+
+
+
+class MonthCarView(MonthArchiveView):
+    model = Car
+    date_field = 'created'
+    template_name = 'home/home.html' # where to show data as form
+    context_object_name = 'cars'
+
+    # if using <int:month> use month_format
+    # by suing <str:month> month_format not need
+    month_format = '%m'
+
+    # result: localhost/2022/3/ filters the objects by date
+
+
+
+    

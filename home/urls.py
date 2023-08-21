@@ -13,4 +13,5 @@ urlpatterns = [
     path('update/<int:pk>/', views.CarupdateView.as_view(), name='car_update'),
     path('login/', views.UserLoginView.as_view(), name='user_login'),
     path('logout/', views.UserLogoutView.as_view(), name='user_logout'),
+    path('<int:year>/<int:month>', views.MonthCarView.as_view(), name='car_month')
 ]
