@@ -2,5 +2,7 @@
 
 
 {% block content %}
-    <p>HOME</p>
+    {% for car in cars %}
+        <p>{{ car.name }}</p>
+    {% endfor %}
 {% endblock content %}
