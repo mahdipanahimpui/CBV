@@ -14,10 +14,11 @@ urlpatterns = [
     # path('login/', views.UserLoginView.as_view(), name='user_login'),
     # path('logout/', views.UserLogoutView.as_view(), name='user_logout'),
     # path('<int:year>/<int:month>', views.MonthCarView.as_view(), name='car_month'),
-    path('', views.Home.as_view(), name='home'),
-    path('<int:pk>/', views.SingleCar.as_view(), name='single_car'),
-    path('delete/<str:car_name>/', views.DeleteCar.as_view(), name='delete_car'),
-    path('create/', views.CarCreate.as_view(), name='car_create'),
-    path('update/<int:pk>', views.CarUpdate.as_view())
+    # path('', views.Home.as_view(), name='home'),
+    # path('<int:pk>/', views.SingleCar.as_view(), name='single_car'),
+    # path('delete/<str:car_name>/', views.DeleteCar.as_view(), name='delete_car'),
+    # path('create/', views.CarCreate.as_view(), name='car_create'),
+    # path('update/<int:pk>', views.CarUpdate.as_view()),
+    path('', views.Home.as_view())
 
 ]

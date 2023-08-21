@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, RedirectView, ListView, DetailVie
 from django.contrib.auth import views as auth_views
 from . models import Car
 from . serializers import CarSerializer
-from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView, ListCreateAPIView
 
 
 # class Home(View):
@@ -254,41 +254,50 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, DestroyAPIView
 
 
 
-class Home(ListAPIView):
+# class Home(ListAPIView):
+#     serializer_class = CarSerializer
+#     queryset = Car.objects.all()
+
+
+
+# class SingleCar(RetrieveAPIView):
+#     serializer_class = CarSerializer
+#     queryset = Car.objects.all()
+#     # sent the <int:pk> by default but can change like <str:name>/ and change the lookup_field = name
+#     lookup_field = 'name'  # sensitive to capital/small letters
+
+
+
+# class DeleteCar(DestroyAPIView): # use delete mehtod in url
+#     serializer_class = CarSerializer
+#     queryset = Car.objects.all()
+
+#     # sent the <int:pk>/ to change use:
+#     lookup_field = 'name' # field name to delete
+#     lookup_url_kwarg = 'car_name' # name of param in url
+
+
+
+
+
+# class CarCreate(CreateAPIView): # use delete mehtod in url
+#     serializer_class = CarSerializer
+#     queryset = Car.objects.all()
+
+
+
+
+# # put method: update the all fields, if not all, error occur
+# # patch method: update partial
+# class CarUpdate(UpdateAPIView):
+#         serializer_class = CarSerializer
+#         queryset = Car.objects.all()
+
+
+# ----------------------------------------------------------------------
+
+
+
+class Home(ListCreateAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-
-
-
-class SingleCar(RetrieveAPIView):
-    serializer_class = CarSerializer
-    queryset = Car.objects.all()
-    # sent the <int:pk> by default but can change like <str:name>/ and change the lookup_field = name
-    lookup_field = 'name'  # sensitive to capital/small letters
-
-
-
-class DeleteCar(DestroyAPIView): # use delete mehtod in url
-    serializer_class = CarSerializer
-    queryset = Car.objects.all()
-
-    # sent the <int:pk>/ to change use:
-    lookup_field = 'name' # field name to delete
-    lookup_url_kwarg = 'car_name' # name of param in url
-
-
-
-
-
-class CarCreate(CreateAPIView): # use delete mehtod in url
-    serializer_class = CarSerializer
-    queryset = Car.objects.all()
-
-
-
-
-# put method: update the all fields, if not all, error occur
-# patch method: update partial
-class CarUpdate(UpdateAPIView):
-        serializer_class = CarSerializer
-        queryset = Car.objects.all()
